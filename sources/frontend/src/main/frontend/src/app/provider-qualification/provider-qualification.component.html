@@ -1,0 +1,147 @@
+<div class="container-fluid">
+  <div class="ps" style="position: relative; width: 100%; max-height: 600px;" [perfectScrollbar]="config">
+
+    <div class="container-fluid">
+      <mat-toolbar class="col-sm-10">
+        <legend class="text-center"><strong>Qualification du Fournisseur</strong></legend>
+        <button class="close btn-dialog-close" (click)="onClose()" tabIndex="-1"><i
+          class="material-icons">close</i></button>
+
+      </mat-toolbar>
+
+    </div>
+    <div toastContainer></div>
+    <div class="contacts container-fluid"  >
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let contact of provider.contacts">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="col-4">
+              {{contact.nom}} {{contact.prenom}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{contact.mail}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+<!--
+          <mat-list role="list">
+            <mat-list-item *ngIf="contact.telephone" role="listitem">Téléphone: {{contact.telephone}}</mat-list-item>
+            <mat-list-item *ngIf="contact.mobile" role="listitem">Mobile: {{contact.mobile}}</mat-list-item>
+            <mat-list-item *ngIf="contact.fax" role="listitem">Fax: {{contact.fax}}</mat-list-item>
+            <mat-list-item role="listitem">Adresse: {{contact.adresse}}</mat-list-item>
+            <mat-list-item >
+              <button type="button" *ngIf="contact.telephone&&IamNotVisiteur()" class="btn btn-danger" (click)="removeContact(contact)">
+                Supprimer
+              </button>
+            </mat-list-item>
+          </mat-list>
+-->
+
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div class="container-fluid">
+
+      <form class="well form-horizontal" (ngSubmit)="onSubmit(qualificationForm)" [formGroup]="qualificationForm">
+        <fieldset class="scheduler-border">
+          <legend class="scheduler-border">Qualifier un fournisseur</legend>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Chiffre d'affaire 1 *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ca1" formControlName="ca1" placeholder="Chiffre d'affaire 1" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Chiffre d'affaire 2</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ca2" formControlName="ca2" placeholder="Chiffre d'affaire 2" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Chiffre d'affaire 3</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ca3" formControlName="ca3" placeholder="Chiffre d'affaire 3" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">EBE 1 *</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ebe1" formControlName="ebe1" placeholder="EBE 1" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">EBE 2</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ebe2" formControlName="ebe2" placeholder="EBE 2" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">EBE 3</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ebe3" formControlName="ebe3" placeholder="EBE 3" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+
+        </fieldset>
+        <div class="text-center form-group row">
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary" [disabled]="!qualificationForm.valid">
+              Ajouter<span class="fa fa-send"></span>
+            </button>
+            <!-- <button type="button" class="btn btn-info">
+              Consulter
+            </button> -->
+            <button type="reset" class="btn btn-danger">
+              Réinitialiser
+            </button>
+
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

@@ -62,7 +62,14 @@
         <button mat-icon-button (click)="onEditContact(row)" ><mat-icon>perm_contact_calendar</mat-icon></button>
       </mat-cell>
     </ng-container>
-    
+
+    <ng-container matColumnDef="qualification">
+      <mat-header-cell *matHeaderCellDef>Qualifier</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button (click)="onQualif(row)" ><mat-icon>perm_contact_calendar</mat-icon></button>
+      </mat-cell>
+    </ng-container>
+
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectRow(row)"></mat-row>

@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { HttpEventType } from '@angular/common/http';
 import { ProfileProviderService } from '../profile-provider/profile-provider.service';
-import { DialogService } from '../service/dialog-service'; 
+import { DialogService } from '../service/dialog-service';
 import { UserStorage } from '../core/userstorage/user.storage';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -27,6 +27,7 @@ import { RoleService } from '../core/role/role.service';
 export class ProviderContactComponent implements OnInit {
 
   provider;
+
   config : PerfectScrollbarConfigInterface = {};
 
   contact = {
@@ -71,7 +72,7 @@ export class ProviderContactComponent implements OnInit {
       // confirmpassword: ['', [Validators.required, passwordConfirming]],
       adresse: ['', Validators.required],
     });
-    
+
   }
   IamNotVisiteur() {
     return (!this.roleService.canActivate("ROLE_VISITEUR"));
@@ -79,12 +80,12 @@ export class ProviderContactComponent implements OnInit {
   }
 
   loadData() {
-    
+
       this.profileProviderService.getByMail(this.provider.mail).subscribe(
         event => {
         if (event.type === HttpEventType.Response) {
           let data:any = event.body;
-  
+
           if (data.status === "OK") {
             this.provider = JSON.parse(data.message);
             console.log(this.provider);
@@ -92,7 +93,7 @@ export class ProviderContactComponent implements OnInit {
         }
       });
   }
-	
+
   showToastErrorMessage(message, title) {
     this.toastrService.error(message, title, {
       timeOut: 3000,
@@ -107,7 +108,7 @@ export class ProviderContactComponent implements OnInit {
     window.scroll(0,0);
   }
   onSubmit({ value, valid }) {
-    
+
     this.profileProviderService.addContact(value, this.provider)
     .subscribe(response => {
       if (response.type === HttpEventType.Response) {
@@ -128,21 +129,21 @@ export class ProviderContactComponent implements OnInit {
     });
   }
 
-  onClose() {    
+  onClose() {
     this.dialogRef.close();
   }
 
   removeContact(contact) {
     console.log("Removing:", contact);
-  
-    
+
+
 this.dialogService.openConfirmDialog('Etes-vous sûr de vouloir supprimer ce contact ?')
     .afterClosed().subscribe(res =>{
       if(res){
         this.profileProviderService.removeContact(contact.id, this.provider).subscribe(
       response => {
         console.log("Remove contact response", response);
-	
+
         if (response.type === HttpEventType.Response) {
           let data:any = response.body;
           if (data.status === "OK") {
@@ -158,9 +159,9 @@ this.dialogService.openConfirmDialog('Etes-vous sûr de vouloir supprimer ce con
         console.log("Error when removing contact", err);
       }
     )
-        
+
       }
     });
-   
+
   }
 }

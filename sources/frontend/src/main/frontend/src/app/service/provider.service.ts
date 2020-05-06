@@ -5,6 +5,7 @@ import { UrlConfig } from '../core/config/url-config';
 
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
+import {Qualification} from "../../model/qualification.model";
 
 @Injectable()
 export class ProviderService {
@@ -38,7 +39,7 @@ export class ProviderService {
   getProviderByName(name: string) {
 
     let requestParams = {
-      nomSociete: name 
+      nomSociete: name
     };
 
     return this.http.post(this.searchUrl, requestParams);
@@ -55,12 +56,19 @@ export class ProviderService {
     });
   }
 
+  addQualification(qualif: Qualification) {
+
+    return this.http.post(UrlConfig.API_URL + "/api/providers/addQualif" , JSON.stringify(qualif), {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
+  }
+
   getProvidersFile() {
-    
+
     const req = new HttpRequest('GET', this.exportUrl, {
       responseType: "blob"
     });
-  
+
     return this.http.request(req)
   }
 
@@ -76,7 +84,7 @@ export class ProviderService {
     const req = new HttpRequest('POST', UrlConfig.API_URL + '/api/files/logo', formdata, {
       responseType: "blob"
     });
-  
+
     return this.http.request(req)
   }
 
