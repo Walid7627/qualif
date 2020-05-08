@@ -12,36 +12,24 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sigma.dto.EquipeDto;
+import com.sigma.dto.QualifDto;
+import com.sigma.model.*;
+import com.sigma.repository.*;
+import com.sigma.service.UserService;
+import com.sigma.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sigma.config.JwtTokenUtil;
 import com.sigma.dto.ContactDto;
 import com.sigma.dto.FournisseurDto;
-import com.sigma.model.ApiResponse;
-import com.sigma.model.Contact;
-import com.sigma.model.Document;
-import com.sigma.model.Fournisseur;
-import com.sigma.model.FournisseurType;
-import com.sigma.model.RoleType;
-import com.sigma.model.VerificationToken;
-import com.sigma.repository.ContactRepository;
-import com.sigma.repository.DocumentRepository;
-import com.sigma.repository.FournisseurRepository;
-import com.sigma.repository.RoleRepository;
-import com.sigma.repository.VerificationTokenRepository;
 import com.sigma.service.StorageService;
 import com.sigma.service.impl.EmailServiceImpl;
 import com.sigma.service.impl.FournisseurExcelServiceImpl;
@@ -52,7 +40,8 @@ import com.sigma.utilisateur.UtilisateurRepository;
 @Controller
 @RequestMapping("/api/providers")
 public class FournisseurController {
-
+	@Autowired
+	UserService u;
 	@GetMapping
 	@ResponseBody
 	public String list() throws com.fasterxml.jackson.core.JsonProcessingException {
@@ -85,6 +74,84 @@ public class FournisseurController {
 		}
 	}
 
+	@PostMapping("/qualif/{fournisseur}")
+	@ResponseBody
+	public String qualif(@PathVariable Long fournisseur, @RequestBody QualifDto qualification) throws com.fasterxml.jackson.core.JsonProcessingException {
+		try {
+			Fournisseur f = fournisseurRepository.findOne(fournisseur);
+
+
+			Qualif qualif = f.getQualifications();
+
+			System.out.print("\n----------------------------\n");
+			System.out.print(qualif);
+			System.out.print("\n----------------------------\n");
+
+			if (qualif == null) {
+
+				Qualif q = new Qualif(qualification.getCa1(), qualification.getCa2(), qualification.getCa3(),
+						qualification.getEbe1(), qualification.getEbe2(), qualification.getEbe3());
+
+				u.addQualif(fournisseur, q);
+				System.out.print("\n11111111111111111111111111\n");
+
+			} else {
+
+				if (qualification.getCa1() != qualif.getCa1()) {
+					qualif.setCa1(qualification.getCa1());
+				}
+				if (qualification.getCa2() != -1 && qualification.getCa2() != qualif.getCa2()) {
+					qualif.setCa2(qualification.getCa2());
+				}
+				if (qualification.getCa3() != -1 && qualification.getCa3() != qualif.getCa3()) {
+					qualif.setCa3(qualification.getCa3());
+				}
+				if (qualification.getEbe1() != qualif.getEbe1()) {
+					qualif.setEbe1(qualification.getEbe1());
+				}
+				if (qualification.getEbe2() != -1 && qualification.getEbe2() != qualif.getEbe2()) {
+					qualif.setEbe2(qualification.getEbe2());
+				}
+				if (qualification.getEbe3() != -1 && qualification.getEbe3() != qualif.getEbe3()) {
+					qualif.setEbe3(qualification.getEbe3());
+				}
+
+				qualifRepository.save(qualif);
+
+				System.out.print("\n000000000000000000000000000000000\n");
+				System.out.print(qualification.getId() + "  " + qualification.getCa1() + "  " + qualification.getCa2() + "  " +  qualification.getCa3() + "  " + qualification.getEbe1() + "  " + qualification.getEbe2() + "  " + qualification.getEbe3()  + "\n");
+			}
+		} catch (Exception ex) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.BAD_REQUEST,
+							"Unable qualif provider",
+							ex)
+			);
+		}
+		return objectMapper.writeValueAsString(
+				new ApiResponse(HttpStatus.OK,
+						"qualification success")
+		);
+	}
+
+	@PostMapping("/getQualif")
+	@ResponseBody
+	public String getQualification(@RequestParam Long id) throws com.fasterxml.jackson.core.JsonProcessingException {
+		if (id == null) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.EXPECTATION_FAILED,
+							"Le paramètre 'id' n'est pas fourni")
+			);
+		}
+
+		Fournisseur f = fournisseurRepository.findOne(id);
+		Qualif q = f.getQualifications();
+
+		return objectMapper.writeValueAsString(
+				new ApiResponse(HttpStatus.OK,
+						objectMapper.writeValueAsString(q))
+		);
+	}
 
 	/**
 	 * POST /create  --> Create a new user and save it in the database.
@@ -131,7 +198,7 @@ public class FournisseurController {
 						date, fournisseur.getNumSiret(), fournisseur.getLogo(), fournisseur.getNomSociete(),
 						fournisseur.getTypeEntreprise(), fournisseur.getMaisonMere(),
 						fournisseur.getCodeAPE(), fournisseur.getCodeCPV(), fournisseur.getRaisonSociale(),
-						fournisseur.getSiteInstitutionnel(), fournisseur.getDescription(), fournisseur.getEvaluations(), fournisseur.getDocuments());
+						fournisseur.getSiteInstitutionnel(), fournisseur.getDescription(), fournisseur.getEvaluations(), fournisseur.getDocuments(), null);
 
 				usr.setRole(roleRepository.findByName(RoleType.ROLE_FOURNISSEUR.toString()));
 
@@ -622,6 +689,9 @@ public class FournisseurController {
 
 	@Autowired
 	private UtilisateurRepository utilisateurRepository;
+
+	@Autowired
+	private QualifRepository qualifRepository;
 
 	@Autowired
 	StorageService storageService;

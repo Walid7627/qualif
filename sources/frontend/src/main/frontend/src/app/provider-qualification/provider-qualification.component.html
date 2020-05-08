@@ -11,34 +11,6 @@
 
     </div>
     <div toastContainer></div>
-    <div class="contacts container-fluid"  >
-      <mat-accordion>
-        <mat-expansion-panel *ngFor="let contact of provider.contacts">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="col-4">
-              {{contact.nom}} {{contact.prenom}}
-            </mat-panel-title>
-            <mat-panel-description>
-              {{contact.mail}}
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-<!--
-          <mat-list role="list">
-            <mat-list-item *ngIf="contact.telephone" role="listitem">Téléphone: {{contact.telephone}}</mat-list-item>
-            <mat-list-item *ngIf="contact.mobile" role="listitem">Mobile: {{contact.mobile}}</mat-list-item>
-            <mat-list-item *ngIf="contact.fax" role="listitem">Fax: {{contact.fax}}</mat-list-item>
-            <mat-list-item role="listitem">Adresse: {{contact.adresse}}</mat-list-item>
-            <mat-list-item >
-              <button type="button" *ngIf="contact.telephone&&IamNotVisiteur()" class="btn btn-danger" (click)="removeContact(contact)">
-                Supprimer
-              </button>
-            </mat-list-item>
-          </mat-list>
--->
-
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
 
     <div class="container-fluid">
 
@@ -60,32 +32,6 @@
           </div>
 
           <div class="form-group row">
-            <label class="control-label col-sm-2">Chiffre d'affaire 2</label>
-            <div class="col-sm-10">
-              <div class="input-group">
-                <div class="input-group-prepend"> <span class="input-group-text">
-                    <i class="fa fa-user"></i>
-                  </span> </div>
-                <input [(ngModel)]="qualification.ca2" formControlName="ca2" placeholder="Chiffre d'affaire 2" class="form-control"
-                       type="text">
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="control-label col-sm-2">Chiffre d'affaire 3</label>
-            <div class="col-sm-10">
-              <div class="input-group">
-                <div class="input-group-prepend"> <span class="input-group-text">
-                    <i class="fa fa-user"></i>
-                  </span> </div>
-                <input [(ngModel)]="qualification.ca3" formControlName="ca3" placeholder="Chiffre d'affaire 3" class="form-control"
-                       type="text">
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group row">
             <label class="control-label col-sm-2">EBE 1 *</label>
             <div class="col-sm-10">
               <div class="input-group">
@@ -99,6 +45,19 @@
           </div>
 
           <div class="form-group row">
+            <label class="control-label col-sm-2">Chiffre d'affaire 2</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ca2" formControlName="ca2" placeholder="Chiffre d'affaire 2" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
             <label class="control-label col-sm-2">EBE 2</label>
             <div class="col-sm-10">
               <div class="input-group">
@@ -106,6 +65,19 @@
                     <i class="fa fa-user"></i>
                   </span> </div>
                 <input [(ngModel)]="qualification.ebe2" formControlName="ebe2" placeholder="EBE 2" class="form-control"
+                       type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="control-label col-sm-2">Chiffre d'affaire 3</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span> </div>
+                <input [(ngModel)]="qualification.ca3" formControlName="ca3" placeholder="Chiffre d'affaire 3" class="form-control"
                        type="text">
               </div>
             </div>

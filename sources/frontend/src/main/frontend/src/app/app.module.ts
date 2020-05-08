@@ -98,6 +98,7 @@ import { VisiteursListComponent } from './visiteurs-list/visiteurs-list.componen
 import { VisiteursFormComponent } from './visiteur-form/visiteur-form.component';
 import { SegmentComponent } from './segment/segment.component';
 import {ProviderQualificationComponent} from "./provider-qualification/provider-qualification.component";
+import {ProviderShowQualificationComponent} from "./provider-show-qualification/provider-show-qualification.component";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -169,6 +170,7 @@ const appRoutes: Routes = [
     NewPasswordComponent,
     SegmentComponent,
     ProviderQualificationComponent,
+    ProviderShowQualificationComponent
   ],
   imports: [
     FormsModule,
@@ -233,7 +235,7 @@ const appRoutes: Routes = [
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     }
   ],
-  entryComponents : [ProviderQualificationComponent, PurchaserFormComponent, TeamFormComponent, TeamPurchaserComponent, EntityFormComponent, ContactUsComponent, AboutComponent, ProvidersReferenceComponent, AdminsEntityFormComponent, MatConfirmDialogComponent, EntityAffectComponent, ProviderContactComponent,ProviderDocumentsComponent,VisiteursFormComponent],
+  entryComponents : [ProviderShowQualificationComponent, ProviderQualificationComponent, PurchaserFormComponent, TeamFormComponent, TeamPurchaserComponent, EntityFormComponent, ContactUsComponent, AboutComponent, ProvidersReferenceComponent, AdminsEntityFormComponent, MatConfirmDialogComponent, EntityAffectComponent, ProviderContactComponent,ProviderDocumentsComponent,VisiteursFormComponent],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

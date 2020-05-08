@@ -21,6 +21,7 @@ import * as FileSaver from 'file-saver';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { RoleService } from '../core/role/role.service';
 import {ProviderQualificationComponent} from "../provider-qualification/provider-qualification.component";
+import {ProviderShowQualificationComponent} from "../provider-show-qualification/provider-show-qualification.component";
 
 
 @Component({
@@ -95,6 +96,19 @@ export class ProvidersListComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.width = "80%";
     const dialogRef = this.dialog.open(ProvidersReferenceComponent,dialogConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadData();
+      console.log('The dialog was closed');
+    });
+  }
+
+  getQualif() {
+    console.log("debut onCreate()");
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "80%";
+    const dialogRef = this.dialog.open(ProviderShowQualificationComponent,dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       this.loadData();
       console.log('The dialog was closed');

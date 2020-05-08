@@ -2,11 +2,7 @@ package com.sigma.model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -21,7 +17,6 @@ public class Qualif {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private long id_four;
     private int ca1;
     private int ca2;
     private int ca3;
@@ -34,15 +29,21 @@ public class Qualif {
         // TODO Auto-generated constructor stub
     }
 
-    public Qualif(int c1, int c2, int c3, int e1, int e2, int e3, long id_f) {
+    public Qualif(int c1, int c2, int c3, int e1, int e2, int e3) {
         this.ca1 = c1;
         this.ca2 = c2;
         this.ca3 = c3;
         this.ebe1 = e1;
         this.ebe2 = e2;
         this.ebe3 = e3;
-        this.id_four = id_f;
     }
+
+    public Long getId() { return id; }
+
+    public int getCa1() {
+        return ca1;
+    }
+
     public int getCa2() {
         return ca2;
     }
@@ -62,18 +63,6 @@ public class Qualif {
     public int getEbe3() {
         return ebe3;
     }
-    public Long getId() {
-
-        return id;
-    }
-
-    public long getId_four() {
-        return this.id_four;
-    }
-
-    public void setId_four(long id_f) {
-        this.id_four = id_f;
-    }
 
     public void setCa1(int ca) {
         this.ca1 = ca;
@@ -82,5 +71,13 @@ public class Qualif {
     public void setCa2(int ca) {
         this.ca2 = ca;
     }
+
+    public void setCa3(int ca) { this.ca3 = ca; }
+
+    public void setEbe1(int ca) { this.ebe1 = ca; }
+
+    public void setEbe2(int ca) { this.ebe2 = ca; }
+
+    public void setEbe3(int ca) { this.ebe3 = ca; }
 }
 

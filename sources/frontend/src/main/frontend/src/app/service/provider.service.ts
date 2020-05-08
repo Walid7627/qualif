@@ -56,11 +56,24 @@ export class ProviderService {
     });
   }
 
-  addQualification(qualif: Qualification) {
+  addQualification(qualif: Qualification, provider: number) {
 
-    return this.http.post(UrlConfig.API_URL + "/api/providers/addQualif" , JSON.stringify(qualif), {
+    return this.http.post(UrlConfig.API_URL + "/api/providers/qualif/" + provider , JSON.stringify(qualif), {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
+  }
+
+  getQualification(id) {
+    let formdata: FormData = new FormData();
+
+    formdata.append('id', id);
+
+    const req = new HttpRequest('POST', UrlConfig.API_URL + '/api/providers/getQualif', formdata, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
   }
 
   getProvidersFile() {

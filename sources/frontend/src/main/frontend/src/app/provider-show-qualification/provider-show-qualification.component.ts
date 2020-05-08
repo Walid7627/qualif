@@ -14,14 +14,15 @@ import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
 import {Qualification} from "../../model/qualification.model";
 import {ProviderService} from "../service/provider.service";
 import {HttpEventType} from "@angular/common/http";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-purchaser-form',
-  templateUrl: './provider-qualification.component.html',
-  styleUrls: ['./provider-qualification.component.css'],
+  templateUrl: './provider-show-qualification.component.html',
+  styleUrls: ['./provider-show-qualification.component.css'],
 })
 
-export class ProviderQualificationComponent implements OnInit {
+export class ProviderShowQualificationComponent implements OnInit {
 
   provider;
 
@@ -35,74 +36,39 @@ export class ProviderQualificationComponent implements OnInit {
   config : PerfectScrollbarConfigInterface = {};
   qualificationForm: FormGroup;
 
+  listProviders: any;
 
 
-  constructor(private providerService:ProviderService, private fb: FormBuilder, public dialogRef: MatDialogRef<ProviderQualificationComponent>,private toastrService: ToastrService) { }
+
+  constructor(private providerService:ProviderService, private fb: FormBuilder, public dialogRef: MatDialogRef<ProviderShowQualificationComponent>,private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.loading = false;
 
 
-    this.providerService.getQualification(this.provider.id).subscribe(
-      event => {
-        if (event.type === HttpEventType.Response) {
-          let data:any = event.body;
-
-          if (data.status === "OK") {
-            this.qualification = JSON.parse(data.message);
-          }
-        }
-      });
-
 
     this.qualificationForm = this.fb.group({
-      ca1: ['', [Validators.required, Validators.pattern("[0-9]+")]],
-      ca2: [''],
-      ca3: [''],
-      ebe1:  ['', [Validators.required, Validators.pattern("[0-9]+"), Validators.minLength(1), Validators.maxLength(14)]],
-      ebe2: [''],
-      ebe3: ['']
+      fournisseurs: ['', Validators.required],
     });
 
-    if (this.qualification.id) {
-
-      this.qualificationForm.setValue({
-        ca1: this.qualification.ca1,
-        ca2: this.qualification.ca2,
-        ca3: this.qualification.ca3,
-        ebe1: this.qualification.ebe1,
-        ebe2: this.qualification.ebe2,
-        ebe3: this.qualification.ebe3
-      });
-    }
+    this.listProviders = this.providerService.getAllProviders().pipe(map(result => {
+      const items = <any[]>result;
+      items.forEach(item => item.libelleProviders = item.nom + "  " + item.prenom);
+      return items;
+    }));
 
   }
 
   onSubmit({value, valid}: {value: Qualification, valid: boolean}) {
 
     console.log(value);
-    // @ts-ignore
-    if (value.ca2 == "") {
-      value.ca2=-1;
-    }
-    // @ts-ignore
-    if (value.ca3 == "") {
-      value.ca3=-1;
-    }
-    // @ts-ignore
-    if (value.ebe2 == "") {
-      value.ebe2=-1;
-    }
-    // @ts-ignore
-    if (value.ebe3 == "") {
-      value.ebe3=-1;
-    }
+
     this.error = "";
     this.registrationError = false;
     this.registrationSuccessful = false;
     this.loading = true;
     console.log("avant submit");
-
+/*
     if (this.qualification.id == null) {
 
       this.providerService.addQualification(value, this.provider.id)
@@ -164,6 +130,8 @@ export class ProviderQualificationComponent implements OnInit {
 
       });
     }
+
+ */
   }
 
   onClose() {

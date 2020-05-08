@@ -1,7 +1,7 @@
 
 export class Qualification {
   id: number;
-  provider: number;
+  //provider: number;
   ca1: number;
   ca2: number;
   ca3: number;
