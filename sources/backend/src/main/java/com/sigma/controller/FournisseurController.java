@@ -147,6 +147,12 @@ public class FournisseurController {
 		Fournisseur f = fournisseurRepository.findOne(id);
 		Qualif q = f.getQualifications();
 
+		if (q == null) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.NOT_FOUND,
+							objectMapper.writeValueAsString(q))
+			);
+		}
 		return objectMapper.writeValueAsString(
 				new ApiResponse(HttpStatus.OK,
 						objectMapper.writeValueAsString(q))

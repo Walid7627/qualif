@@ -57,11 +57,11 @@ export class ProviderQualificationComponent implements OnInit {
 
     this.qualificationForm = this.fb.group({
       ca1: ['', [Validators.required, Validators.pattern("[0-9]+")]],
-      ca2: [''],
-      ca3: [''],
+      ca2: ['', [Validators.pattern("[0-9]+")]],
+      ca3: ['', [Validators.pattern("[0-9]+")]],
       ebe1:  ['', [Validators.required, Validators.pattern("[0-9]+"), Validators.minLength(1), Validators.maxLength(14)]],
-      ebe2: [''],
-      ebe3: ['']
+      ebe2: ['', [Validators.pattern("[0-9]+")]],
+      ebe3: ['', [Validators.pattern("[0-9]+")]]
     });
 
     if (this.qualification.id) {
