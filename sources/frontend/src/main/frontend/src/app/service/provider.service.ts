@@ -32,6 +32,10 @@ export class ProviderService {
     return this.http.get<Provider[]>(this.allProvidersUrl);
   }
 
+  getQualifiedProviders() {
+    return this.http.get<Provider[]>(this.allProvidersUrl + "/qualified");
+  }
+
   getAllMotherCompany() : Observable<Provider[]>{
     return this.http.get<Provider[]>(this.allMotherCompanyUrl);
   }

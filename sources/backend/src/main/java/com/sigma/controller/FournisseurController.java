@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +57,27 @@ public class FournisseurController {
 					);
 		}
 	}
+
+	@GetMapping("/qualified")
+	@ResponseBody
+	public String list_with_qualification() throws com.fasterxml.jackson.core.JsonProcessingException {
+		try {
+			List<Fournisseur> users = IterableToList.toList(fournisseurRepository.findAll());
+			List<Fournisseur> users_qualified = new ArrayList<>();
+			for (Fournisseur f : users) {
+				if (f.getQualifications() != null) {
+					users_qualified.add(f);
+				}
+			}
+			return objectMapper.writeValueAsString(users_qualified);
+		} catch (Exception ex) {
+			return objectMapper.writeValueAsString(
+					new ApiResponse(HttpStatus.BAD_REQUEST,
+							"Unable to find users",
+							ex)
+			);
+		}
+	}
 	
 	@GetMapping("/last")
 	@ResponseBody
@@ -80,12 +102,7 @@ public class FournisseurController {
 		try {
 			Fournisseur f = fournisseurRepository.findOne(fournisseur);
 
-
 			Qualif qualif = f.getQualifications();
-
-			System.out.print("\n----------------------------\n");
-			System.out.print(qualif);
-			System.out.print("\n----------------------------\n");
 
 			if (qualif == null) {
 
@@ -93,7 +110,6 @@ public class FournisseurController {
 						qualification.getEbe1(), qualification.getEbe2(), qualification.getEbe3());
 
 				u.addQualif(fournisseur, q);
-				System.out.print("\n11111111111111111111111111\n");
 
 			} else {
 
@@ -117,9 +133,6 @@ public class FournisseurController {
 				}
 
 				qualifRepository.save(qualif);
-
-				System.out.print("\n000000000000000000000000000000000\n");
-				System.out.print(qualification.getId() + "  " + qualification.getCa1() + "  " + qualification.getCa2() + "  " +  qualification.getCa3() + "  " + qualification.getEbe1() + "  " + qualification.getEbe2() + "  " + qualification.getEbe3()  + "\n");
 			}
 		} catch (Exception ex) {
 			return objectMapper.writeValueAsString(

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 import {Purchaser} from '../../model/purchaser.model';
 import {Address} from '../../model/address.model';
 import {PurchaserService} from '../service/purchaser.service';
@@ -15,6 +15,8 @@ import {Qualification} from "../../model/qualification.model";
 import {ProviderService} from "../service/provider.service";
 import {HttpEventType} from "@angular/common/http";
 import {map} from "rxjs/operators";
+import {ProviderQualificationComponent} from "../provider-qualification/provider-qualification.component";
+import {MyBarChartComponent} from "../my-bar-chart/my-bar-chart.component";
 
 @Component({
   selector: 'app-purchaser-form',
@@ -37,10 +39,13 @@ export class ProviderShowQualificationComponent implements OnInit {
   qualificationForm: FormGroup;
 
   listProviders: any;
+  private k: number;
+  private a: number;
+
+  private fournisseurs_nb: any;
 
 
-
-  constructor(private providerService:ProviderService, private fb: FormBuilder, public dialogRef: MatDialogRef<ProviderShowQualificationComponent>,private toastrService: ToastrService) { }
+  constructor(private dialog: MatDialog, private providerService:ProviderService, private fb: FormBuilder, public dialogRef: MatDialogRef<ProviderShowQualificationComponent>,private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.loading = false;
@@ -51,7 +56,7 @@ export class ProviderShowQualificationComponent implements OnInit {
       fournisseurs: ['', Validators.required],
     });
 
-    this.listProviders = this.providerService.getAllProviders().pipe(map(result => {
+    this.listProviders = this.providerService.getQualifiedProviders().pipe(map(result => {
       const items = <any[]>result;
       items.forEach(item => item.libelleProviders = item.nom + "  " + item.prenom);
       return items;
@@ -61,6 +66,9 @@ export class ProviderShowQualificationComponent implements OnInit {
 
   onSubmit({value, valid}: {value: Qualification, valid: boolean}) {
 
+    // @ts-ignore
+    this.fournisseurs_nb = value.fournisseurs;
+
     console.log(value);
 
     this.error = "";
@@ -68,70 +76,46 @@ export class ProviderShowQualificationComponent implements OnInit {
     this.registrationSuccessful = false;
     this.loading = true;
     console.log("avant submit");
-/*
-    if (this.qualification.id == null) {
 
-      this.providerService.addQualification(value, this.provider.id)
-        .subscribe(res => {
-          this.loading = false;
-          console.log("Service data:");
-          console.log(res);
-          let data: any = res;
-          if (data.status === "OK") {
-            this.registrationSuccessful = true;
-            this.showToastSuccessMessage("Le fournisseur a bien été qualifié", "Ajout qualification");
-            // this.scrollToSuccessMessage();
-            this.qualificationForm.reset();
-          } else {
-            this.error = data.message;
-            this.registrationError = true
-            // this.scrollToErrorMessage();
-            this.showToastErrorMessage("Erreur lors de la qualification du fournisseur : " + this.error, "Ajout qualification");
+    this.k = 0;
+    while (this.k < this.fournisseurs_nb.length) {
+      console.log(this.fournisseurs_nb[this.k]);
+
+      this.providerService.getQualification(this.fournisseurs_nb[this.k]).subscribe(
+        event => {
+          if (event.type === HttpEventType.Response) {
+            let data:any = event.body;
+
+            if (data.status === "OK") {
+              console.log(data.message);
+              //this.qualification = JSON.parse(data.message);
+            } else {
+              this.error = data.message;
+              this.registrationError = true
+              this.showToastErrorMessage("Erreur lors de la récupération d'informations : " + this.error, "Récupération qualification");
+            }
           }
-          console.log("Data:");
-          console.log(data);
-        }, err => {
-          this.loading = false;
-          this.error = err;
-          this.registrationError = true;
-          this.registrationSuccessful = false;
-          // this.scrollToErrorMessage();
-          this.showToastErrorMessage("Erreur lors de la qualification du fournisseur: " + this.error, "Ajout qualification");
         });
-    } else {
-      console.log("modifying:");
 
-      this.providerService.addQualification(value, this.provider.id)
-      .subscribe(res => {
-        this.loading = false;
-        console.log("purchaserService data edited:");
-        console.log(res);
-        let data:any = res;
-        if (data.status === "OK") {
-          this.registrationSuccessful = true;
-          // this.scrollToSuccessMessage();
-          this.showToastSuccessMessage("La qualification a été modifié avec succès","Modification qualification");
-
-        } else {
-          this.error = data.message;
-          this.registrationError = true
-          // this.scrollToErrorMessage();
-          this.showToastErrorMessage("Erreur lors de la modification de la qualification : ","Modification qualification");
-
-        }
-        console.log("Data:");
-        console.log(data);
-      }, err => {
-        this.loading = false;
-        this.error = err;
-        this.registrationError = true;
-        this.registrationSuccessful = false;
-        this.showToastErrorMessage("Erreur lors de la modification de la qualification : ","Modification qualification");
-
-      });
+      this.k = this.k + 1;
     }
 
- */
+    this.showGraphique();
+
+  }
+
+  showGraphique() {
+    console.log("debut showGraphique()");
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "80%";
+    const dialogRef = this.dialog.open(MyBarChartComponent,dialogConfig);
+    dialogRef.componentInstance.donnees = null;
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.ngOnInit();
+    });
   }
 
   onClose() {

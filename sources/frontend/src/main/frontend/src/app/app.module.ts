@@ -99,6 +99,13 @@ import { VisiteursFormComponent } from './visiteur-form/visiteur-form.component'
 import { SegmentComponent } from './segment/segment.component';
 import {ProviderQualificationComponent} from "./provider-qualification/provider-qualification.component";
 import {ProviderShowQualificationComponent} from "./provider-show-qualification/provider-show-qualification.component";
+import {MyBarChartComponent} from "./my-bar-chart/my-bar-chart.component";
+
+import {ChartsModule} from 'ng2-charts';
+
+import { AppRoutingModule } from './app-routing.module';
+
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -170,7 +177,8 @@ const appRoutes: Routes = [
     NewPasswordComponent,
     SegmentComponent,
     ProviderQualificationComponent,
-    ProviderShowQualificationComponent
+    ProviderShowQualificationComponent,
+    MyBarChartComponent
   ],
   imports: [
     FormsModule,
@@ -203,7 +211,9 @@ const appRoutes: Routes = [
     ToastContainerModule,
     MDBBootstrapModule.forRoot(),
     CarouselModule.forRoot(),
-    WavesModule.forRoot()
+    WavesModule.forRoot(),
+    AppRoutingModule,
+    ChartsModule
   ],
   providers: [
     CodeCPVService,
