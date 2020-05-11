@@ -79,5 +79,6 @@ public class Qualif {
     public void setEbe2(int ca) { this.ebe2 = ca; }
 
     public void setEbe3(int ca) { this.ebe3 = ca; }
+
 }
 
